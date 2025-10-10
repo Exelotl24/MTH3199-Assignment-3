@@ -1,4 +1,4 @@
-%Runs numerical integration using forward Euler approximation
+%Runs numerical integration using explicit midpoint approximation
 %INPUTS:
 %rate_func_in: the function used to compute dXdt. rate_func_in will
 % have the form: dXdt = rate_func_in(t,X) (t is before X)
@@ -11,8 +11,7 @@
 %h_avg: the average step size
 %num_evals: total number of calls made to rate_func_in during the integration
 function [t_list,X_list,h_avg, num_evals] = ...
-    forward_euler_fixed_step_integration(rate_func_in,tspan,X0,h_ref)
-    %your code here
+explicit_midpoint_fixed_step_integration(rate_func_in,tspan,X0,h_ref)
 
     % calculate N so step size is close/less than h_ref
     N = ceil((tspan(2)-tspan(1))/h_ref);
@@ -20,14 +19,14 @@ function [t_list,X_list,h_avg, num_evals] = ...
     t_list = linspace(tspan(1), tspan(2), N);
     h_avg = (tspan(2)-tspan(1))/N;
 
-    % initialize variables
+    % initialize variablese
     X_list = zeros([N, 1]);
     num_evals = 0;
     X = X0;
     X_list(1) = X0;
 
     for i = 2:N
-        [X, evals] = forward_euler_step(rate_func_in, t_list(i), X, h_avg);
+        [X, evals] = explicit_midpoint_step(rate_func_in, t_list(i), X, h_avg);
         X_list(i) = X;
         num_evals = num_evals + evals;
     end
