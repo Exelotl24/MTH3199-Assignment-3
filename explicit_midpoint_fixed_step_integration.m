@@ -16,18 +16,18 @@ explicit_midpoint_fixed_step_integration(rate_func_in,tspan,X0,h_ref)
     % calculate N so step size is close/less than h_ref
     N = ceil((tspan(2)-tspan(1))/h_ref);
     % create t_list based on N
-    t_list = linspace(tspan(1), tspan(2), N);
+    t_list = linspace(tspan(1), tspan(2), N+1);
     h_avg = (tspan(2)-tspan(1))/N;
 
-    % initialize variablese
-    X_list = zeros([N, 1]);
+    % initialize variables
+    X_list = zeros(N+1,length(X0));
     num_evals = 0;
     X = X0;
-    X_list(1) = X0;
+    X_list(1,:) = X0';
 
-    for i = 2:N
+    for i = 1:N
         [X, evals] = explicit_midpoint_step(rate_func_in, t_list(i), X, h_avg);
-        X_list(i) = X;
+        X_list(i+1,:) = X';
         num_evals = num_evals + evals;
     end
 end
