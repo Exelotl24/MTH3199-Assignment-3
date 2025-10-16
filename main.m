@@ -116,3 +116,11 @@ figure()
 loglog(num_evals_FE_01, e_global_FE_01, 'DisplayName', 'Forward Eurler')
 hold on
 loglog(num_evals_MP_01, e_global_MP_01, 'DisplayName', 'Explicit Midpoint')
+
+%-------------------- Backwards Euler--------------------------------
+
+
+
+
+
+
