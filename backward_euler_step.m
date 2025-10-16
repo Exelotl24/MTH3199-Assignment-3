@@ -12,8 +12,16 @@
 %num_evals: A count of the number of times that you called
 % rate_func_in when computing the next step
 function [XB,num_evals] = backward_euler_step(rate_func_in,t,XA,h)
-    % only steps one time
-    num_evals = 1;
+
+    num_evals = 0;
+
+    function X = rate_func_wrapper(X_guess)
+        num_evals = num_evals+1;
+        X = XA + h*rate_func_in((t + h), X_guess)-X_guess;
+    end
+
     % forward Euler formula
-    XB = XA + h*rate_func_in((t + h), XA);
+    solver_params = struct();
+    solver_params.numerical_diff = 0;
+    XB = multi_newton_solver(@rate_func_wrapper, XA,solver_params);
 end

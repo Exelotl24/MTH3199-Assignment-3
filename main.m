@@ -174,3 +174,7 @@ title('# Evaluations vs. Global Error Func 02')
 xlabel('# Evaluations')
 ylabel('Global Error')
 legend()
+
+% --------------------------- Backward Euler ----------------------------
+
+backward_euler_step(@rate_func01, 0, 1, 0.2)

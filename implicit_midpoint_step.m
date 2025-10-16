@@ -13,21 +13,17 @@
 % rate_func_in when computing the next step
 function [XB,num_evals] = implicit_midpoint_step(rate_func_in,t,XA,h)
 
-    % calculate N so step size is close/less than h_ref
-    N = ceil((tspan(2)-tspan(1))/h_ref);
-    % create t_list based on N
-    t_list = linspace(tspan(1), tspan(2), N+1);
-    h_avg = (tspan(2)-tspan(1))/N;
-
-    % initialize variables
-    X_list = zeros(N+1,length(X0));
     num_evals = 0;
-    X = X0;
-    X_list(1,:) = X0';
 
-    for i = 1:N
-        [X, evals] = explicit_midpoint_step(rate_func_in, t_list(i), X, h_avg);
-        X_list(i+1,:) = X';
-        num_evals = num_evals + evals;
+    function X = rate_func_wrapper(X_guess)
+        num_evals = num_evals+1;
+        X_n05 = XA/2+X_guess/2;
+        X = XA + h*rate_func_in(t+h/2, X_n05) - X_guess;
     end
+
+    % forward Euler formula
+    solver_params = struct();
+    solver_params.numerical_diff = 0;
+    XB = multi_newton_solver(@rate_func_wrapper, XA,solver_params);
+
 end
